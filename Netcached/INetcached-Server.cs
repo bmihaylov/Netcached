@@ -11,7 +11,7 @@ namespace Netcached
     public interface INetcached_Server
     {
         [OperationContract]
-        bool Set(string key, byte[] data, bool replace = true);
+        bool Set(string key, byte[] data, Int32 priority = 0);
 
         [OperationContract]
         bool Get(string key);
