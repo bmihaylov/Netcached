@@ -9,7 +9,12 @@ namespace Netcached
 {
     public class Netcached_Server : INetcached_Server
     {
-        public bool Set(string key, byte[] data, bool replace = true)
+        public bool Set(string key, byte[] data, int priority = 0)
+        {
+            return false;
+        }
+
+        public bool Delete(string key)
         {
             return false;
         }

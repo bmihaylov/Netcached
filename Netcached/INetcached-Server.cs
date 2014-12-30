@@ -14,6 +14,9 @@ namespace Netcached
         bool Set(string key, byte[] data, Int32 priority = 0);
 
         [OperationContract]
+        bool Delete(string key);
+
+        [OperationContract]
         bool Get(string key);
     }
 }
