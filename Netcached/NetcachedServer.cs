@@ -84,8 +84,9 @@ namespace Netcached
 
             if (enoughSpace)
             {
-                priorityQueue.Add(ref oldHandle, new Entry(key, DateTime.Now.Ticks, priority, data));
-                keyHandleStore.Add(key, oldHandle);
+                IPriorityQueueHandle<Entry> handle = null;
+                priorityQueue.Add(ref handle, new Entry(key, DateTime.Now.Ticks, priority, data));
+                keyHandleStore[key] = handle;
                 return true;
             }
 
