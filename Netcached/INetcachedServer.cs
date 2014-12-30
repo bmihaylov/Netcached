@@ -8,7 +8,7 @@ using System.Text;
 namespace Netcached
 {
     [ServiceContract]
-    public interface INetcached_Server
+    public interface INetcachedServer
     {
         [OperationContract]
         bool Set(string key, byte[] data, Int32 priority = 0);

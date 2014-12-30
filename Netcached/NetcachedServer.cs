@@ -9,7 +9,7 @@ using C5;
 namespace Netcached
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class Netcached_Server : INetcached_Server
+    public class NetcachedServer : INetcachedServer
     {
         int a = 0;
         struct OrderEntry : IComparable<OrderEntry>

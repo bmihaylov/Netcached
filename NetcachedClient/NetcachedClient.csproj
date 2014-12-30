@@ -84,9 +84,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Netcached\Netcached-Server.csproj">
+    <ProjectReference Include="..\Netcached\NetcachedServer.csproj">
       <Project>{517bcff8-163f-4483-b5ae-e49ef843461f}</Project>
-      <Name>Netcached-Server</Name>
+      <Name>NetcachedServer</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

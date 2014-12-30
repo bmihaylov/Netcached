@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netcached-Server", "Netcached\Netcached-Server.csproj", "{517BCFF8-163F-4483-B5AE-E49EF843461F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetcachedServer", "Netcached\NetcachedServer.csproj", "{517BCFF8-163F-4483-B5AE-E49EF843461F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetcachedClient", "NetcachedClient\NetcachedClient.csproj", "{4EC1E105-BDDD-4B30-94DB-9F5FE49BC8AD}"
 EndProject

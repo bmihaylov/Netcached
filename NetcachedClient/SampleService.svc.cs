@@ -23,7 +23,7 @@ namespace NetcachedClient
         /// <returns></returns>
         public ServerUpDateTimeResponse GetServerUpDateTime(ServerUpDateTimeRequest request)
         {
-            Netcached_Server netcached = new Netcached_Server();
+            NetcachedServer netcached = new NetcachedServer();
             if (request.Override)
             {
                 netcached.Delete(request.Key);

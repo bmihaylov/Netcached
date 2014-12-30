@@ -48,8 +48,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="INetcached-Server.cs" />
-    <Compile Include="Netcached-Server.cs" />
+    <Compile Include="INetcachedServer.cs" />
+    <Compile Include="NetcachedServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
