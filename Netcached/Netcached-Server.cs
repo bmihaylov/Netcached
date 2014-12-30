@@ -18,7 +18,7 @@ namespace Netcached
         /// That is: if a key1 has priority 0 and key2 has priority 1 -> key1 will be evicted first, should
         /// the need arise (due to lack of memory).
         /// Keys with the same priority are ordered according to the time stamp of their last use.</param>
-        /// <returns></returns>
+        /// <returns>Wheter the operation was successful</returns>
         public bool Set(string key, byte[] data, int priority = 0)
         {
             return false;
@@ -28,7 +28,7 @@ namespace Netcached
         /// Delete the entry the specified key.
         /// </summary>
         /// <param name="key"></param>
-        /// <returns></returns>
+        /// <returns>Wheter the operation was successful</returns</returns>
         public bool Delete(string key)
         {
             return false;
