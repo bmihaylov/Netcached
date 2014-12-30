@@ -4,11 +4,41 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using C5;
 
 namespace Netcached
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class Netcached_Server : INetcached_Server
     {
+        int a = 0;
+        struct OrderEntry : IComparable<OrderEntry>
+        {
+            public OrderEntry(string key, DateTime lastAccess, int priority)
+            {
+                this.key = key;
+                this.lastAccess = lastAccess;
+                this.priority = priority;
+            }
+
+            int IComparable<OrderEntry>.CompareTo(OrderEntry other)
+            {
+                if (priority == other.priority)
+                {
+                    TimeSpan diff = lastAccess - other.lastAccess;
+                    return TimeSpan.Compare(diff, TimeSpan.Zero);
+                }
+                return priority - other.priority;
+            }
+
+            public string key;
+            public DateTime lastAccess;
+            public int priority;
+        }
+
+        private IntervalHeap<OrderEntry> order = new IntervalHeap<OrderEntry>();
+        private Dictionary<string, byte[]> keyValueStore = new Dictionary<string,byte[]>();
+
         /// <summary>
         /// Set the value for the key with data, replacing it if the key is already present.
         /// </summary>
@@ -25,7 +55,7 @@ namespace Netcached
         }
 
         /// <summary>
-        /// Delete the entry the specified key.
+        /// Delete the entry with the specified key.
         /// </summary>
         /// <param name="key"></param>
         /// <returns>Wheter the operation was successful</returns</returns>
@@ -41,7 +71,7 @@ namespace Netcached
         /// <returns></returns>
         public byte[] Get(string key)
         {
-            return null;
+            return new byte[]{(byte)++a};
         }
     }
 }

@@ -17,6 +17,6 @@ namespace Netcached
         bool Delete(string key);
 
         [OperationContract]
-        bool Get(string key);
+        byte[] Get(string key);
     }
 }
