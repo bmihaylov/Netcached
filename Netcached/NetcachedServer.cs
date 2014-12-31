@@ -89,24 +89,25 @@ namespace Netcached
         /// Returns the value for the specified key if present, and null if the operation failed.
         /// </summary>
         /// <param name="key"></param>
-        /// <returns>Value for the specified key if present, and null if the operation failed.</returns>
+        /// <returns>Value for the specified key if present, and null if the operation failed</returns>
         public byte[] Get(string key)
         {
             return null;
         }
+
         struct Entry : IComparable<Entry>
         {
             public string key;
             /// <summary>
             // this is DateTime.Now.Ticks for the last access to the key
             /// </summary>
-            long lastAccess; 
+            long lastAccess;
             int priority;
             public byte[] data;
             /// <summary>
             /// this is only an approximation of the memory in bytes taken due to this particular Entry
             /// </summary>
-            public long size; 
+            public long size;
 
             //TODO change order of arguments
             public Entry(string key, long lastAccess, int priority, byte[] data)
@@ -117,7 +118,7 @@ namespace Netcached
                 this.data = data;
                 // 16 is the overehead of an empty string
                 // first constant is due to the overhead of the data structures and the stored PriorityQueueHandles
-                this.size = 160 +  (16 + key.Length * sizeof(char) + sizeof(long) + sizeof(int) + data.Length + sizeof(long));
+                this.size = 160 + (16 + key.Length * sizeof(char) + sizeof(long) + sizeof(int) + data.Length + sizeof(long));
             }
 
             int IComparable<Entry>.CompareTo(Entry other)
