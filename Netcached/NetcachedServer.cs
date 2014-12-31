@@ -92,7 +92,19 @@ namespace Netcached
         /// <returns>Value for the specified key if present, and null if the operation failed</returns>
         public byte[] Get(string key)
         {
-            return null;
+            IPriorityQueueHandle<Entry> handle;
+            if (!keyHandleStore.TryGetValue(key, out handle))
+            {
+                return null;
+            }
+
+            Entry entry = priorityQueue.Delete(handle);
+            entry.lastAccess = DateTime.Now.Ticks;
+            IPriorityQueueHandle<Entry> newHandle = null;
+            priorityQueue.Add(ref newHandle, entry);
+            keyHandleStore[key] = newHandle;
+
+            return entry.data;
         }
 
         struct Entry : IComparable<Entry>
@@ -101,13 +113,13 @@ namespace Netcached
             /// <summary>
             // this is DateTime.Now.Ticks for the last access to the key
             /// </summary>
-            long lastAccess;
-            int priority;
+            public long lastAccess;
             public byte[] data;
             /// <summary>
             /// this is only an approximation of the memory in bytes taken due to this particular Entry
             /// </summary>
             public long size;
+            int priority;
 
             //TODO change order of arguments
             public Entry(string key, long lastAccess, int priority, byte[] data)
