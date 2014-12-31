@@ -13,19 +13,30 @@ namespace Netcached
     {
         struct Entry : IComparable<Entry>
         {
+            long lastAccess; // this is DateTime.Now.Ticks for the last access to the key
+            int priority;
+
             //TODO change order of arguments
             public Entry(string key, long lastAccess, int priority, byte[] data)
             {
-                this.key = key;
                 this.lastAccess = lastAccess;
                 this.priority = priority;
-                this.data = data;
+                this.Key = key;
+                this.Data = data;
                 // 16 is the overehead of an empty string
                 // first constant is due to the overhead of the data structures and the stored PriorityQueueHandles
-                this.size = 160 +  (16 + key.Length * sizeof(char) + sizeof(long) + sizeof(int) + data.Length + sizeof(long));
+                this.Size = 160 +  (16 + key.Length * sizeof(char) + sizeof(long) + sizeof(int) + data.Length + sizeof(long));
             }
 
-            int IComparable<Entry>.CompareTo(Entry other)
+            public string Key;
+            public byte[] Data;
+
+            /// <summary>
+            /// This is only an approximation of the memory in bytes taken due to this particular Entry.
+            /// </summary>
+            public long Size;
+
+            public int CompareTo(Entry other)
             {
                 if (priority == other.priority)
                 {
@@ -33,17 +44,12 @@ namespace Netcached
                     {
                         return 0;
                     }
+
                     return lastAccess - other.lastAccess > 0 ? 1 : -1;
                 }
+
                 return priority - other.priority;
             }
-
-            public string key;
-            long lastAccess; // this is DateTime.Now.Ticks for the last access to the key
-            int priority;
-            public byte[] data;
-            // this is only an approximation of the memory in bytes taken due to this particular Entry
-            public long size; 
         }
 
         private IntervalHeap<Entry> priorityQueue = new IntervalHeap<Entry>();
@@ -70,15 +76,15 @@ namespace Netcached
 
             if (keyHandleStore.TryGetValue(key, out oldHandle))
             {
-                long sizeDifference = newEntry.size - priorityQueue[oldHandle].size;
+                long sizeDifference = newEntry.Size - priorityQueue[oldHandle].Size;
                 if (usedSpace - sizeDifference > allowedSpace)
                 {
-                    enoughSpace = freeSpace(sizeDifference);
+                    enoughSpace = FreeSpace(sizeDifference);
                 }
             }
-            else if (usedSpace + newEntry.size > allowedSpace)
+            else if (usedSpace + newEntry.Size > allowedSpace)
             {
-                enoughSpace = freeSpace(newEntry.size);
+                enoughSpace = FreeSpace(newEntry.Size);
             }
 
 
@@ -93,7 +99,7 @@ namespace Netcached
             return false;
         }
 
-        private bool freeSpace(long desiredSpace)
+        private bool FreeSpace(long desiredSpace)
         {
             if (desiredSpace > allowedSpace)
             {
@@ -103,8 +109,8 @@ namespace Netcached
             while (allowedSpace - usedSpace < desiredSpace)
             {
                 Entry entry = priorityQueue.DeleteMin();
-                usedSpace -= entry.size;
-                keyHandleStore.Remove(entry.key);
+                usedSpace -= entry.Size;
+                keyHandleStore.Remove(entry.Key);
             }
             return false;
         }
@@ -123,7 +129,7 @@ namespace Netcached
         /// Returns the value for the specified key if present, and null if the operation failed.
         /// </summary>
         /// <param name="key"></param>
-        /// <returns></returns>
+        /// <returns>Value for the specified key if present, and null if the operation failed</returns>
         public byte[] Get(string key)
         {
             return null;
