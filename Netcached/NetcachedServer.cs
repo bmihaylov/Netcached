@@ -29,18 +29,20 @@ namespace Netcached
         /// <returns>Whether the operation was successful</returns>
         public bool Set(string key, byte[] data, int priority = 0)
         {
-            Entry newEntry = new Entry(key, DateTime.Now.Ticks, priority, data);
+            Entry newEntry = new Entry(key, DateTime.Now.Ticks, data, priority);
             IPriorityQueueHandle<Entry> oldHandle = null;
             bool enoughSpace = true;
 
             if (keyHandleStore.TryGetValue(key, out oldHandle))
             {
-                long sizeDifference = newEntry.size - priorityQueue[oldHandle].size;
-                priorityQueue.Delete(oldHandle);
+                long oldSize = priorityQueue[oldHandle].size; 
+                long sizeDifference = newEntry.size - oldSize;
                 if (usedSpace - sizeDifference > allowedSpace)
                 {
                     enoughSpace = FreeSpace(sizeDifference);
                 }
+                priorityQueue.Delete(oldHandle);
+                usedSpace -= oldSize;
             }
             else if (usedSpace + newEntry.size > allowedSpace)
             {
@@ -51,7 +53,8 @@ namespace Netcached
             if (enoughSpace)
             {
                 IPriorityQueueHandle<Entry> handle = null;
-                priorityQueue.Add(ref handle, new Entry(key, DateTime.Now.Ticks, priority, data));
+                priorityQueue.Add(ref handle, newEntry);
+                usedSpace += newEntry.size;
                 keyHandleStore[key] = handle;
                 return true;
             }
@@ -121,8 +124,7 @@ namespace Netcached
             public long size;
             int priority;
 
-            //TODO change order of arguments
-            public Entry(string key, long lastAccess, int priority, byte[] data)
+            public Entry(string key, long lastAccess, byte[] data, int priority)
             {
                 this.key = key;
                 this.lastAccess = lastAccess;
