@@ -13,6 +13,6 @@ namespace NetcachedClient.Responses
         /// The last DateTime when the server was driven up.
         /// </summary>
         [DataMember]
-        public string DateTime { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }
