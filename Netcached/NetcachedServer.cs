@@ -11,8 +11,8 @@ namespace Netcached
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class NetcachedServer : INetcachedServer
     {
-        long usedSpace = 0;
-        long allowedSpace = 128 * 1000 * 1000;
+        private long usedSpace = 0;
+        private long allowedSpace = 128 * 1000 * 1000;
         private IntervalHeap<Entry> priorityQueue = new IntervalHeap<Entry>();
         private Dictionary<string, IPriorityQueueHandle<Entry>> keyHandleStore =
             new Dictionary<string, IPriorityQueueHandle<Entry>>();
@@ -35,8 +35,8 @@ namespace Netcached
 
             if (keyHandleStore.TryGetValue(key, out oldHandle))
             {
-                long oldSize = priorityQueue[oldHandle].size; 
-                long sizeDifference = newEntry.size - oldSize;
+                long oldSize = priorityQueue[oldHandle].Size; 
+                long sizeDifference = newEntry.Size - oldSize;
                 if (usedSpace - sizeDifference > allowedSpace)
                 {
                     enoughSpace = FreeSpace(sizeDifference);
@@ -44,9 +44,9 @@ namespace Netcached
                 priorityQueue.Delete(oldHandle);
                 usedSpace -= oldSize;
             }
-            else if (usedSpace + newEntry.size > allowedSpace)
+            else if (usedSpace + newEntry.Size > allowedSpace)
             {
-                enoughSpace = FreeSpace(newEntry.size);
+                enoughSpace = FreeSpace(newEntry.Size);
             }
 
 
@@ -54,7 +54,7 @@ namespace Netcached
             {
                 IPriorityQueueHandle<Entry> handle = null;
                 priorityQueue.Add(ref handle, newEntry);
-                usedSpace += newEntry.size;
+                usedSpace += newEntry.Size;
                 keyHandleStore[key] = handle;
                 return true;
             }
@@ -72,8 +72,8 @@ namespace Netcached
             while (allowedSpace - usedSpace < desiredSpace)
             {
                 Entry entry = priorityQueue.DeleteMin();
-                usedSpace -= entry.size;
-                keyHandleStore.Remove(entry.key);
+                usedSpace -= entry.Size;
+                keyHandleStore.Remove(entry.Key);
             }
             return false;
         }
@@ -85,7 +85,15 @@ namespace Netcached
         /// <returns>Wheter the operation was successful</returns</returns>
         public bool Delete(string key)
         {
-            return false;
+            IPriorityQueueHandle<Entry> handle = null;
+            if (!keyHandleStore.TryGetValue(key, out handle))
+            {
+                return false;
+            }
+
+            keyHandleStore.Remove(key);
+            priorityQueue.Delete(handle);
+            return true;
         }
 
         /// <summary>
@@ -102,7 +110,7 @@ namespace Netcached
             }
 
             Entry entry = priorityQueue.Delete(handle);
-            entry.lastAccess = DateTime.Now.Ticks;
+            entry.LastAccess = DateTime.Now.Ticks;
             IPriorityQueueHandle<Entry> newHandle = null;
             priorityQueue.Add(ref newHandle, entry);
             keyHandleStore[key] = newHandle;
@@ -112,38 +120,38 @@ namespace Netcached
 
         struct Entry : IComparable<Entry>
         {
-            public string key;
+            public string Key;
             /// <summary>
             // this is DateTime.Now.Ticks for the last access to the key
             /// </summary>
-            public long lastAccess;
+            public long LastAccess;
             public byte[] data;
             /// <summary>
             /// this is only an approximation of the memory in bytes taken due to this particular Entry
             /// </summary>
-            public long size;
+            public long Size;
             int priority;
 
             public Entry(string key, long lastAccess, byte[] data, int priority)
             {
-                this.key = key;
-                this.lastAccess = lastAccess;
+                this.Key = key;
+                this.LastAccess = lastAccess;
                 this.priority = priority;
                 this.data = data;
                 // 16 is the overehead of an empty string
                 // first constant is due to the overhead of the data structures and the stored PriorityQueueHandles
-                this.size = 160 + (16 + key.Length * sizeof(char) + sizeof(long) + sizeof(int) + data.Length + sizeof(long));
+                this.Size = 160 + (16 + key.Length * sizeof(char) + sizeof(long) + sizeof(int) + data.Length + sizeof(long));
             }
 
             int IComparable<Entry>.CompareTo(Entry other)
             {
                 if (priority == other.priority)
                 {
-                    if (lastAccess == other.lastAccess)
+                    if (LastAccess == other.LastAccess)
                     {
                         return 0;
                     }
-                    return lastAccess - other.lastAccess > 0 ? 1 : -1;
+                    return LastAccess - other.LastAccess > 0 ? 1 : -1;
                 }
                 return priority - other.priority;
             }
