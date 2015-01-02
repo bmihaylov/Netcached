@@ -7,7 +7,7 @@ using System.Text;
 using System.Configuration;
 using C5;
 
-namespace Netcached
+namespace Netcached.Server
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class NetcachedServer : INetcachedServer
