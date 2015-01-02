@@ -1,55 +1,16 @@
-﻿using Netcached;
-using NetcachedClient.Requests;
-using NetcachedClient.Responses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
+using System.Web;
 
-namespace NetcachedClient
+namespace NetcachedClient.Serializing
 {
-    /// <summary>
-    /// Sample services implementation
-    /// </summary>
-    public class SampleService : ISampleService
+    public class DataSerializer
     {
-        /// <summary>
-        /// Gets the last DateTime when the server was driven up.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public ServerUpDateTimeResponse GetServerUpDateTime(ServerUpDateTimeRequest request)
-        {
-            NetcachedServer netcached = new NetcachedServer();
-            if (request.Override)
-            {
-                netcached.Delete(request.Key);
-            }
-
-            byte[] cachedDateTime = netcached.Get(request.Key);
-            DateTime dateTime = DateTime.Now;
-
-            if (cachedDateTime != null)
-            {
-                dateTime = this.Deserialize<DateTime>(cachedDateTime);
-            }
-            else
-            {
-                netcached.Set(request.Key, this.Serialize<DateTime>(dateTime));
-            }
-
-            return new ServerUpDateTimeResponse()
-            {
-                DateTime = dateTime,
-            };
-        }
-
-        private byte[] Serialize<T>(T data)
+        public static byte[] Serialize<T>(T data)
         {
             byte[] serialized = null;
 
@@ -71,7 +32,7 @@ namespace NetcachedClient
             return serialized;
         }
 
-        private T Deserialize<T>(byte[] data)
+        public static T Deserialize<T>(byte[] data)
         {
             T deserialized = default(T);
 

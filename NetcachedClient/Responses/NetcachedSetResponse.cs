@@ -4,18 +4,18 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace NetcachedClient.Requests
+namespace NetcachedClient.Responses
 {
     /// <summary>
-    /// Request that is meant for memcaching.
+    /// SetResponse from the memcache.
     /// </summary>
     [DataContract]
-    public class NetcachedRequest
+    public class NetcachedSetResponse
     {
         /// <summary>
-        /// The key for getting/setting/deleting the data.
+        /// Indicates whether the operation was successful.
         /// </summary>
         [DataMember]
-        public string Key { get; set; }
+        public bool IsSuccessful { get; set; }
     }
 }
