@@ -6,13 +6,16 @@ using System.Web;
 
 namespace NetcachedClient.Responses
 {
+    /// <summary>
+    /// DeleteResponse from deleting a key in the memcache.
+    /// </summary>
     [DataContract]
-    public class ServerUpDateTimeResponse
+    public class NetcachedDeleteResponse
     {
         /// <summary>
-        /// The last DateTime when the server was driven up.
+        /// Indicates whether the operation was successful.
         /// </summary>
         [DataMember]
-        public DateTime DateTime { get; set; }
+        public bool IsSuccessful { get; set; }
     }
 }
