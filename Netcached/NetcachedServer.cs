@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Configuration;
 using C5;
 
 namespace Netcached
@@ -12,7 +13,7 @@ namespace Netcached
     public class NetcachedServer : INetcachedServer
     {
         private long usedSpace = 0;
-        private long allowedSpace = 128 * 1000 * 1000;
+        private long allowedSpace = Convert.ToInt64(ConfigurationManager.AppSettings["allowedMegabytes"]) * 1000 * 1000;
         private IntervalHeap<Entry> priorityQueue = new IntervalHeap<Entry>();
         private Dictionary<string, IPriorityQueueHandle<Entry>> keyHandleStore =
             new Dictionary<string, IPriorityQueueHandle<Entry>>();
@@ -35,7 +36,7 @@ namespace Netcached
 
             if (keyHandleStore.TryGetValue(key, out oldHandle))
             {
-                long oldSize = priorityQueue[oldHandle].Size; 
+                long oldSize = priorityQueue[oldHandle].Size;
                 long sizeDifference = newEntry.Size - oldSize;
                 if (usedSpace - sizeDifference > allowedSpace)
                 {
