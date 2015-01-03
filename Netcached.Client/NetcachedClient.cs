@@ -7,12 +7,13 @@ using System.Linq;
 using System.Configuration;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System;
 
 namespace Netcached.Client
 {
     public class NetcachedClient
     {
-        private static readonly NetcachedServerClient[] netcachedServerServiceClients =
+        private readonly NetcachedServerClient[] netcachedServerServiceClients =
             GetNetcachedServerServiceClients();
 
         /// <summary>
@@ -75,21 +76,22 @@ namespace Netcached.Client
             return isSuccessful;
         }
 
-        private static NetcachedServerClient GetNetcachedServerClient(string key)
+        private NetcachedServerClient GetNetcachedServerClient(string key)
         {
-            int serviceClientIndex = key.GetHashCode() % netcachedServerServiceClients.Length;
+            int serviceClientIndex = Math.Abs(key.GetHashCode()) % netcachedServerServiceClients.Length;
             return netcachedServerServiceClients[serviceClientIndex];
         }
+
         private static NetcachedServerClient[] GetNetcachedServerServiceClients()
         {
             var section = (ConfigurationManager.GetSection("NetcachedClient/Servers") as Hashtable)
                 .Cast<DictionaryEntry>()
-                .ToDictionary(n => n.Key.ToString(), n => n.Value.ToString());
+                .ToDictionary(n => n.Key.ToString(), n => n.Value);
 
-            string addressFormat = "http://{0}:{1}/NetcachedServer.svc";
+            string addressFormat = "http://{0}/NetcachedServer.svc";
             return section.Keys.Select(key => new NetcachedServerClient(
                 new BasicHttpBinding(),
-                new EndpointAddress(string.Format(addressFormat, key, section[key])))).ToArray();
+                new EndpointAddress(string.Format(addressFormat, key)))).ToArray();
         }
     }
 }

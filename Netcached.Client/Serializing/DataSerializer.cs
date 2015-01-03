@@ -33,7 +33,7 @@ namespace Netcached.Client.Serializing
         {
             T deserialized = default(T);
 
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream(data))
             {
                 try
                 {

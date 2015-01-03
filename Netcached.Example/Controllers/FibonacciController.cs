@@ -8,28 +8,27 @@ using Netcached.Example.Models;
 
 namespace Netcached.Example.Controllers
 {
-    [RequireHttps]
     public class FibonacciController : Controller
     {
-        // 
         // GET: /Fibonacci/
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: /Fibonacci/position
-        public ActionResult Index(int position)
+        // GET: /Fibonacci/Calculate/
+        public ActionResult Calculate(int position)
         {
-
+            ViewBag.ReturnUrl = Url.Action("Index");
             NetcachedClient client = new NetcachedClient();
-            int? value = client.Get<int?>(position.ToString());
-            if (value != null)
+            long? result = client.Get<long?>(position.ToString());
+            if (!result.HasValue)
             {
-                return View(new FibonacciViewModel(){Position = position, Value = (int)value});
+                result = CalculateFibonacci(position);
+                client.Set(position.ToString(), result);
             }
 
-            return View(new FibonacciViewModel(){Position = position, Value = Calculate(position)});
+            return View(new FibonacciViewModel() { Position = position, Value = result.Value });
         }
 
         /// <summary>
@@ -37,13 +36,13 @@ namespace Netcached.Example.Controllers
         /// </summary>
         /// <param name="position">The position of the number in the Fibonacci sequence, starting from 0</param>
         /// <returns></returns>
-        private static Int64 Calculate(Int32 position)
+        private static Int64 CalculateFibonacci(Int32 position)
         {
             if (position == 0 || position == 1)
             {
                 return position;
             }
-            return Calculate(position - 2) + Calculate(position - 1);
+            return CalculateFibonacci(position - 2) + CalculateFibonacci(position - 1);
         }
     }
 }
