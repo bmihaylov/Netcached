@@ -1,12 +1,19 @@
 ﻿using Netcached.Client.Netcached.Server.NetcachedServer.Adapter;
 using Netcached.Client.Serializing;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Linq;
+using System.Configuration;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace Netcached.Client
 {
     public class NetcachedClient
     {
-        private static readonly NetcachedServerClient netcachedServerServiceClient
-            = new NetcachedServerClient();
+        private static readonly NetcachedServerClient[] netcachedServerServiceClients =
+            GetNetcachedServerServiceClients();
 
         /// <summary>
         /// Gets data from cache.
@@ -16,6 +23,12 @@ namespace Netcached.Client
         /// <returns>The data</returns>
         public T Get<T>(string key)
         {
+            if (netcachedServerServiceClients.Length == 0)
+            {
+                return default(T);
+            }
+
+            NetcachedServerClient netcachedServerServiceClient = GetNetcachedServerClient(key);
             byte[] cacheData = netcachedServerServiceClient.Get(key);
             if (cacheData == null)
             {
@@ -34,11 +47,12 @@ namespace Netcached.Client
         /// <returns>Whether the operation was successful</returns>
         public bool Set<T>(string key, T data)
         {
-            if (data == null)
+            if (data == null || netcachedServerServiceClients.Length == 0)
             {
                 return false;
             }
 
+            NetcachedServerClient netcachedServerServiceClient = GetNetcachedServerClient(key);
             byte[] serializedData = DataSerializer.Serialize<T>(data);
             bool isSuccessful = netcachedServerServiceClient.Set(key, serializedData);
             return isSuccessful;
@@ -51,8 +65,31 @@ namespace Netcached.Client
         /// <returns>Whether the operation was successful</returns>
         public bool Delete(string key)
         {
+            if (netcachedServerServiceClients.Length == 0)
+            {
+                return false;
+            }
+
+            NetcachedServerClient netcachedServerServiceClient = GetNetcachedServerClient(key);
             bool isSuccessful = netcachedServerServiceClient.Delete(key);
             return isSuccessful;
+        }
+
+        private static NetcachedServerClient GetNetcachedServerClient(string key)
+        {
+            int serviceClientIndex = key.GetHashCode() % netcachedServerServiceClients.Length;
+            return netcachedServerServiceClients[serviceClientIndex];
+        }
+        private static NetcachedServerClient[] GetNetcachedServerServiceClients()
+        {
+            var section = (ConfigurationManager.GetSection("NetcachedClient/Servers") as Hashtable)
+                .Cast<DictionaryEntry>()
+                .ToDictionary(n => n.Key.ToString(), n => n.Value.ToString());
+
+            string addressFormat = "http://{0}:{1}/NetcachedServer.svc";
+            return section.Keys.Select(key => new NetcachedServerClient(
+                new BasicHttpBinding(),
+                new EndpointAddress(string.Format(addressFormat, key, section[key])))).ToArray();
         }
     }
 }
