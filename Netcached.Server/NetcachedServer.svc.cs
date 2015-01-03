@@ -42,14 +42,18 @@ namespace Netcached.Server
                 {
                     enoughSpace = FreeSpace(sizeDifference);
                 }
-                priorityQueue.Delete(oldHandle);
-                usedSpace -= oldSize;
+                if (enoughSpace)
+                {
+                    priorityQueue.Replace(oldHandle, newEntry);
+                    usedSpace -= oldSize;
+                    usedSpace += newEntry.Size;
+                    return true;
+                }
             }
             else if (usedSpace + newEntry.Size > allowedSpace)
             {
                 enoughSpace = FreeSpace(newEntry.Size);
             }
-
 
             if (enoughSpace)
             {
@@ -110,12 +114,9 @@ namespace Netcached.Server
                 return null;
             }
 
-            Entry entry = priorityQueue.Delete(handle);
+            Entry entry = priorityQueue[handle];
             entry.LastAccess = DateTime.Now.Ticks;
-            IPriorityQueueHandle<Entry> newHandle = null;
-            priorityQueue.Add(ref newHandle, entry);
-            keyHandleStore[key] = newHandle;
-
+            priorityQueue.Replace(handle, entry);
             return entry.data;
         }
 
