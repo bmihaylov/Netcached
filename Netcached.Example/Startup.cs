@@ -8,7 +8,6 @@ namespace Netcached.Example
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
         }
     }
 }
