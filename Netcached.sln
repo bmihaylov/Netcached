@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netcached.Server", "Netcached.Server\Netcached.Server.csproj", "{2624F8DF-B211-45C7-BFF6-847041015BBC}"
 EndProject
@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netcached.Client", "Netcach
 	ProjectSection(ProjectDependencies) = postProject
 		{2624F8DF-B211-45C7-BFF6-847041015BBC} = {2624F8DF-B211-45C7-BFF6-847041015BBC}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netcached.Example", "Netcached.Example\Netcached.Example.csproj", "{863CB002-ABA9-4FC3-B825-E62ACD5B8209}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,10 @@ Global
 		{83A5FA8A-712B-4CA2-8BA8-4459A9802E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83A5FA8A-712B-4CA2-8BA8-4459A9802E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83A5FA8A-712B-4CA2-8BA8-4459A9802E73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{863CB002-ABA9-4FC3-B825-E62ACD5B8209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{863CB002-ABA9-4FC3-B825-E62ACD5B8209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{863CB002-ABA9-4FC3-B825-E62ACD5B8209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{863CB002-ABA9-4FC3-B825-E62ACD5B8209}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
