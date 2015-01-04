@@ -1,16 +1,16 @@
 ﻿using Netcached.Client.Netcached.Server.NetcachedServer.Adapter;
 using Netcached.Client.Serializing;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Linq;
-using System.Configuration;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System;
+using System.Collections;
+using System.Configuration;
+using System.Linq;
+using System.ServiceModel;
 
 namespace Netcached.Client
 {
+    /// <summary>
+    /// Memcached client used to access hosted memcached server(s).
+    /// </summary>
     public class NetcachedClient
     {
         private readonly NetcachedServerClient[] netcachedServerServiceClients =

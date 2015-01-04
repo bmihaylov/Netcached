@@ -5,8 +5,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Netcached.Client.Serializing
 {
+    /// <summary>
+    /// A data serializer.
+    /// </summary>
     public class DataSerializer
     {
+        /// <summary>
+        /// Serializes a data of type T.
+        /// </summary>
+        /// <typeparam name="T">The type of the data.</typeparam>
+        /// <param name="data">The data.</param>
+        /// <returns>The serialized data.</returns>
         public static byte[] Serialize<T>(T data)
         {
             byte[] serialized = null;
@@ -29,6 +38,12 @@ namespace Netcached.Client.Serializing
             return serialized;
         }
 
+        /// <summary>
+        /// Deserializes a serialized data to type T.
+        /// </summary>
+        /// <typeparam name="T">The type to deserialize to.</typeparam>
+        /// <param name="data">The serialized data.</param>
+        /// <returns>The deserialized data.</returns>
         public static T Deserialize<T>(byte[] data)
         {
             T deserialized = default(T);

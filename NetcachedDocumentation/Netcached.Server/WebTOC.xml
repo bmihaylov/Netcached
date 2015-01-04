@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpTOC>
+
+  <HelpTOCNode Id="beb12d8d-06bd-49e9-ad1d-7233a9c61753" Title="Netcached.Server" Url="html/4747a733-2846-ee9e-0915-adfc2d4245d5.htm">
+    <HelpTOCNode Id="5c4ef157-3d8c-4be2-b276-35ad8c584228" Title="INetcachedServer Interface" Url="html/5e0625df-1cba-26b4-c880-d664c485f91a.htm">
+      <HelpTOCNode Id="2dfa5766-37e2-4f23-aa3a-b0417d616abc" Title="INetcachedServer Methods" Url="html/7595e3b8-1a6a-f286-9310-83054a3f38df.htm">
+        <HelpTOCNode Title="Delete Method " Url="html/85b52972-3871-d6eb-e23c-e956d1452abe.htm" />
+        <HelpTOCNode Title="Get Method " Url="html/0b3d56b3-57ca-b7ca-0d35-3c31fb8a7b94.htm" />
+        <HelpTOCNode Title="Set Method " Url="html/18e0c39b-6825-0a1c-6a62-4ac5ed083b00.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="1f8c503e-5f67-418b-9fab-5a01686078ad" Title="NetcachedServer Class" Url="html/d280fe99-c0b0-e9ba-fb79-d8ae011d0155.htm">
+      <HelpTOCNode Title="NetcachedServer Constructor " Url="html/969cfbb2-40df-c162-ae70-285e1560e9c1.htm" />
+      <HelpTOCNode Id="6492f16c-5303-43cd-92dc-44d0db4f3b0e" Title="NetcachedServer Methods" Url="html/aa7692d7-84b0-4aab-1220-8cced5121c30.htm">
+        <HelpTOCNode Title="Delete Method " Url="html/b811e7b1-c036-5204-0ff8-6ec59d7885d0.htm" />
+        <HelpTOCNode Title="Get Method " Url="html/edb9c5ff-8bbd-41f1-4e67-6f4ea1bd3a60.htm" />
+        <HelpTOCNode Title="Set Method " Url="html/80dae10c-7cfd-cd28-9ef6-c3a66c091281.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+</HelpTOC>

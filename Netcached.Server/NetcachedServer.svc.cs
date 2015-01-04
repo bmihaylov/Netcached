@@ -1,14 +1,14 @@
-﻿using System;
+﻿using C5;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using System.Configuration;
-using C5;
+using System.ServiceModel;
 
 namespace Netcached.Server
 {
+    /// <summary>
+    /// A memcached server(WCF Service).
+    /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class NetcachedServer : INetcachedServer
     {
