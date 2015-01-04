@@ -9,7 +9,7 @@ using System.ServiceModel;
 namespace Netcached.Client
 {
     /// <summary>
-    /// Memcached client used to access hosted memcached server(s).
+    /// A client used to access hosted Netcached server(s).
     /// </summary>
     public class NetcachedClient
     {
