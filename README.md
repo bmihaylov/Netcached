@@ -30,5 +30,7 @@ client.Set("some_key", value);
 int n = client.Get<int>("another_key");
 client.Delete("yet_another_key");
 ```  
-Note that the type parameter for Get is neeed for deserialization to work for arbitrary types.  
+* Note that the type parameter for Get is neeed for deserialization to work for arbitrary types.  
+* The Set method has an aditional argument - priority, which defaults to 0. The higher the priority of a key is, the lower the chance that the entry for it in the cache will be deleted when memory is not enough for the next Set. Out of the keys with the lowest priority, the least recently used is thrown out.   
+  
 Look at Netcached.Example to see how Netcached can be integrated in a project.
