@@ -8,6 +8,7 @@ using Netcached.Example.Models;
 
 namespace Netcached.Example.Controllers
 {
+    [RequireHttps]
     public class FibonacciController : Controller
     {
         // GET: /Fibonacci/
