@@ -7,7 +7,7 @@ using System.ServiceModel;
 namespace Netcached.Server
 {
     /// <summary>
-    /// A memcached server(WCF Service).
+    /// An in memory key-value store server(WCF Service).
     /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class NetcachedServer : INetcachedServer
