@@ -30,7 +30,17 @@ namespace Netcached.Client
             }
 
             NetcachedServerClient netcachedServerServiceClient = GetNetcachedServerClient(key);
-            byte[] cacheData = netcachedServerServiceClient.Get(key);
+            byte[] cacheData = null;
+
+            try
+            {
+                cacheData = netcachedServerServiceClient.Get(key);
+            }
+            catch
+            {
+                return default(T);
+            }
+
             if (cacheData == null)
             {
                 return default(T);
@@ -55,7 +65,17 @@ namespace Netcached.Client
 
             NetcachedServerClient netcachedServerServiceClient = GetNetcachedServerClient(key);
             byte[] serializedData = DataSerializer.Serialize<T>(data);
-            bool isSuccessful = netcachedServerServiceClient.Set(key, serializedData);
+            bool isSuccessful;
+
+            try
+            {
+                isSuccessful = netcachedServerServiceClient.Set(key, serializedData);
+            }
+            catch
+            {
+                return false;
+            }
+
             return isSuccessful;
         }
 
@@ -72,7 +92,16 @@ namespace Netcached.Client
             }
 
             NetcachedServerClient netcachedServerServiceClient = GetNetcachedServerClient(key);
-            bool isSuccessful = netcachedServerServiceClient.Delete(key);
+            bool isSuccessful;
+            try
+            {
+                isSuccessful = netcachedServerServiceClient.Delete(key);
+            }
+            catch
+            {
+                return false;
+            }
+
             return isSuccessful;
         }
 
